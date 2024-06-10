@@ -1,0 +1,74 @@
+body, html {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    background-image: url(papyrus.jpg);
+    background-size: cover;
+
+}
+
+
+.content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    color: white;
+}
+
+.input-container {
+    margin-top: 20px;
+}
+
+.code-input {
+    width: 40px;
+    height: 40px;
+    font-size: 24px;
+    text-align: center;
+    margin: 0 5px;
+    border: 2px solid white;
+    border-radius: 5px;
+}
+
+.code-input:focus {
+    outline: none;
+    border-color: black;
+}
+
+#message-box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 3;
+    text-align: center;
+}
+
+#message-box.hidden {
+    display: none;
+}
+
+textarea {
+    width: 300px;
+    height: 150px;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+#gLogo{
+    position: absolute;
+    opacity: 0.5;
+   
+}
