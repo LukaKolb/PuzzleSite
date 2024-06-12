@@ -1,3 +1,4 @@
+
 body, html {
     height: 100%;
     width: 100%;
@@ -9,34 +10,53 @@ body, html {
     overflow: hidden;
     background-image: url(papyrus.jpg);
     background-size: cover;
-
 }
-
-
 .content {
     position: relative;
     z-index: 2;
     text-align: center;
     color: white;
+    background-image: url('gang_Logo-removebg-preview.png');
+    background-size: contain;
+    background-position: top;
 }
 
-.input-container {
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 100px);
+    grid-gap: 10px;
+    justify-content: center;
     margin-top: 20px;
 }
 
-.code-input {
-    width: 40px;
-    height: 40px;
-    font-size: 24px;
-    text-align: center;
-    margin: 0 5px;
+.cube {
+    width: 100px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: white;
+    color: black;
     border: 2px solid white;
-    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+    /* From https://css.glass */
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.3); 
 }
 
-.code-input:focus {
-    outline: none;
-    border-color: black;
+.cube.selected {
+    background: blue;
+    color: white;
+}
+
+.cube>i{
+    font-size: 40px;
+    color: turquoise;
 }
 
 #message-box {
@@ -67,8 +87,25 @@ button {
     cursor: pointer;
 }
 
-#gLogo{
-    position: absolute;
-    opacity: 0.5;
-   
+.fade-out {
+    animation: fadeOut 1s forwards;
+}
+
+.fade-in {
+    animation: fadeIn 1s forwards;
+}
+
+@keyframes fadeOut {
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }

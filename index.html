@@ -3,19 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Puzzle</title>
-    <link rel="stylesheet" href="style.css" X-Content-Type-Options="nosniff" >
-</head>
+    <title>Cube Selection</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet">
 <body>
-    <img id="gLogo" src="gang_Logo-removebg-preview.png" alt="">
+    
     <div class="content">
-   
-        <h1 id="title">FEAR THE RED DAWN</h1>
-        <div class="input-container">
-            <input type="text" maxlength="1" class="code-input">
-            <input type="text" maxlength="1" class="code-input">
-            <input type="text" maxlength="1" class="code-input">
-            <input type="text" maxlength="1" class="code-input">
+        <h1 id="title">Select the Correct Sequence</h1>
+        <div class="grid">
+           
+            <div class="cube" data-position="1"><i class="lni lni-cloudy-sun"></i></i></div>
+            <div class="cube" data-position="2"><i class="lni lni-sun"></i></i></div>
+            <div class="cube" data-position="3"><i class="lni lni-thunder"></i></i></div>
+            <div class="cube" data-position="4"><i class="lni lni-star-half"></i></div>
+            <div class="cube" data-position="5"><i class="lni lni-connectdevelop"></i></div>
+            <div class="cube" data-position="6"><i class="lni lni-sketch"></i></i></div>
+            <div class="cube" data-position="7"><i class="lni lni-connectdevelop"></i></div>
+            <div class="cube" data-position="8"><i class="lni lni-infinite"></i></i></div>
+            <div class="cube" data-position="9"><i class="lni lni-strikethrough"></i></div>
         </div>
     </div>
     <div id="message-box" class="hidden">
@@ -23,6 +28,5 @@
         <button onclick="closeMessage()">Close</button>
     </div>
     <script src="script.js"></script>
-
 </body>
 </html>

@@ -1,32 +1,24 @@
-const correctCode = '1234';
+const correctSequence = [1, 5, 9, 3];
+let selectedSequence = [];
 let attempts = 0;
 
 document.addEventListener('DOMContentLoaded', () => {
-    const inputs = document.querySelectorAll('.code-input');
-    inputs.forEach((input, index) => {
-        input.addEventListener('input', () => {
-            if (input.value.length === 1) {
-                if (index < inputs.length - 1) {
-                    inputs[index + 1].focus();
-                } else {
-                    validateCode();
-                }
-            }
-        });
-        input.addEventListener('keydown', (e) => {
-            if (e.key === 'Backspace' && input.value === '') {
-                if (index > 0) {
-                    inputs[index - 1].focus();
+    const cubes = document.querySelectorAll('.cube');
+    cubes.forEach(cube => {
+        cube.addEventListener('click', () => {
+            if (!cube.classList.contains('selected') && selectedSequence.length < 4) {
+                cube.classList.add('selected');
+                selectedSequence.push(parseInt(cube.dataset.position));
+                if (selectedSequence.length === 4) {
+                    validateSequence();
                 }
             }
         });
     });
 });
 
-function validateCode() {
-    const inputs = document.querySelectorAll('.code-input');
-    const enteredCode = Array.from(inputs).map(input => input.value).join('');
-    if (enteredCode === correctCode) {
+function validateSequence() {
+    if (arraysEqual(selectedSequence, correctSequence)) {
         document.querySelector('.content').classList.add('fade-out');
         setTimeout(() => {
             document.querySelector('.content').style.display = 'none';
@@ -41,16 +33,19 @@ function validateCode() {
                 document.querySelector('.content').style.display = 'none';
             }, 1000);
         } else {
-            inputs.forEach(input => {
-                input.value = '';
-                input.classList.add('error');
-            });
-            inputs[0].focus();
-            setTimeout(() => {
-                inputs.forEach(input => input.classList.remove('error'));
-            }, 1000);
+            resetCubes();
         }
     }
+}
+
+function arraysEqual(arr1, arr2) {
+    return JSON.stringify(arr1) === JSON.stringify(arr2);
+}
+
+function resetCubes() {
+    const cubes = document.querySelectorAll('.cube');
+    cubes.forEach(cube => cube.classList.remove('selected'));
+    selectedSequence = [];
 }
 
 function closeMessage() {
@@ -59,35 +54,3 @@ function closeMessage() {
         document.getElementById('message-box').classList.add('hidden');
     }, 1000);
 }
-
-// Adding fade-in and fade-out CSS animations
-const styleSheet = document.createElement("style");
-styleSheet.innerText = `
-    .fade-out {
-        animation: fadeOut 1s forwards;
-    }
-
-    .fade-in {
-        animation: fadeIn 1s forwards;
-    }
-
-    @keyframes fadeOut {
-        to {
-            opacity: 0;
-        }
-    }
-
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-        }
-        to {
-            opacity: 1;
-        }
-    }
-
-    .error {
-        border-color: red;
-    }
-`;
-document.head.appendChild(styleSheet);
