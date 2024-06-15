@@ -10,15 +10,26 @@ body, html {
     overflow: hidden;
     background-image: url(papyrus.jpg);
     background-size: cover;
+  
+}
+
+.title-container {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    color: white;
 }
 .content {
+    min-width: 500px;
+    min-height: 300px;
     position: relative;
     z-index: 2;
     text-align: center;
     color: white;
     background-image: url('gang_Logo-removebg-preview.png');
     background-size: contain;
-    background-position: top;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 .grid {
@@ -40,7 +51,6 @@ body, html {
     border: 2px solid white;
     cursor: pointer;
     transition: background 0.3s;
-    /* From https://css.glass */
     background: rgba(255, 255, 255, 0.2);
     border-radius: 16px;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
@@ -50,7 +60,7 @@ body, html {
 }
 
 .cube.selected {
-    background: blue;
+    background: green;
     color: white;
 }
 
