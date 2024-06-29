@@ -1,33 +1,67 @@
-const levels = [
-    { 
-        correctSequence: [1, 5, 9, 3],
-        tips: [
-            "Tip 1: Partly cloudy with a chance of insight.",
-            "Tip 2: Connecting the dots can lead to breakthroughs.",
-            "Tip 3: A line through the middle may strike a chord.",
-            "Tip 4: Thunder may follow the brightest light."
-        ]
-    },
-    { 
-        correctSequence: [2, 4, 6, 8],
-        tips: [
-            "Tip 1: The brightest star in the sky.",
-            "Tip 2: Half a star, half the mystery.",
-            "Tip 3: A master of the craft.",
-            "Tip 4: Infinity is just the beginning."
-        ]
-    },
-    { 
-        correctSequence: [1, 7, 3, 9],
-        tips: [
-            "Tip 1: Partly cloudy with a chance of insight.",
-            "Tip 2: Unlocking new paths.",
-            "Tip 3: Thunder may follow the brightest light.",
-            "Tip 4: A line through the middle may strike a chord."
-        ]
-    },
-    // Add more levels as needed
+const iconTips = {
+    "lni lni-cloudy-sun": [
+        "Tip 1: Partly cloudy with a chance of insight.",
+        "Tip 2: Weather the storm with clarity.",
+        "Tip 3: A bright spot in a cloudy day."
+    ],
+    "lni lni-sun": [
+        "Tip 1: The brightest star in the sky.",
+        "Tip 2: Let the sunshine in.",
+        "Tip 3: Radiate positivity."
+    ],
+    "lni lni-thunder": [
+        "Tip 1: Thunder may follow the brightest light.",
+        "Tip 2: Strike with precision.",
+        "Tip 3: A bolt from the blue."
+    ],
+    "lni lni-star-half": [
+        "Tip 1: Half a star, half the mystery.",
+        "Tip 2: Shine halfway through.",
+        "Tip 3: A star on the rise."
+    ],
+    "lni lni-connectdevelop": [
+        "Tip 1: Connecting the dots can lead to breakthroughs.",
+        "Tip 2: Build connections.",
+        "Tip 3: Develop your path."
+    ],
+    "lni lni-sketch": [
+    "Tip 1: a girl's best friend",
+    "Tip 2: Draw your destiny, like cutting a perfect gem.",
+    "Tip 3: Search for adamas and you shal find."
+        ],
+    "lni lni-key": [
+        "Tip 1: Unlocking new paths.",
+        "Tip 2: The key to success.",
+        "Tip 3: Open the door to possibilities."
+    ],
+    "lni lni-infinite": [
+        "Tip 1: Infinity is just the beginning.",
+        "Tip 2: Endless possibilities.",
+        "Tip 3: Loop through infinity."
+    ],
+    "lni lni-strikethrough": [
+        "Tip 1: A line through the middle may strike a chord.",
+        "Tip 2: Cross out the unnecessary.",
+        "Tip 3: Strike with precision and your path through the middle will be revealed"
+    ]
+};
+
+const levelSolutions = [
+    ["lni lni-sun", "lni lni-star-half", "lni lni-sketch", "lni lni-infinite"],
+    ["lni lni-cloudy-sun", "lni lni-key", "lni lni-thunder", "lni lni-strikethrough"],
+    ["lni lni-strikethrough", "lni lni-connectdevelop", "lni lni-thunder", "lni lni-key"],
+    ["lni lni-star-half", "lni lni-sketch", "lni lni-sun", "lni lni-cloudy-sun"],
+    ["lni lni-key", "lni lni-infinite", "lni lni-diamond", "lni lni-thunder"]
 ];
+
+const levelCompletionMessages = [
+    "Level 1 Completed! Remember the solomon famiglia is our ally and should not be threathend, executed or otherwise dismemberd",
+    "Level 2 Completed! To travel between the city and Fort Cadworth apply human blood to wall 48C and speak the words: Fear the Red dawn",
+    "Level 3 Completed! Do remember the 3 family heads, Inny,  Minny & MICKEY. If ever asked for verification by a higher ranking officer you must always present your isignia and passcode ",
+    "Level 4 Completed! Receive your passcode & token from the orc chieftan Bildud to enter the main lair. The OTP code is ",
+    "Level 5 Completed! Whatever you do don't intefere with the red magical appliances in the main underground hall!!!"
+];
+
 
 let currentLevel = 0;
 let selectedSequence = [];
@@ -41,34 +75,35 @@ document.addEventListener('DOMContentLoaded', () => {
 function loadLevel(level) {
     const gridContainer = document.getElementById('grid-container');
     gridContainer.innerHTML = '';
-    const icons = [
-        "lni lni-cloudy-sun",
-        "lni lni-sun",
-        "lni lni-thunder",
-        "lni lni-star-half",
-        "lni lni-connectdevelop",
-        "lni lni-sketch",
-        "lni lni-key",
-        "lni lni-infinite",
-        "lni lni-strikethrough"
-    ];
-    const shuffledIcons = shuffleArray(icons);
 
+    const solution = levelSolutions[level];
+    const allIcons = Object.keys(iconTips);
+    const shuffledIcons = shuffleArray([...allIcons]);
+
+    const iconPositionMap = {};
     for (let i = 0; i < 9; i++) {
+        const icon = shuffledIcons[i];
+        iconPositionMap[i + 1] = icon;
+
         const cube = document.createElement('div');
         cube.classList.add('cube');
         cube.dataset.position = i + 1;
-        cube.dataset.icon = shuffledIcons[i];
-        cube.innerHTML = `<i class="${shuffledIcons[i]}"></i>`;
+        cube.dataset.icon = icon;
+        cube.innerHTML = `<i class="${icon}"></i>`;
         cube.addEventListener('click', () => selectCube(cube));
         gridContainer.appendChild(cube);
     }
 
+    // Save the icon positions for validation
+    window.currentIconPositionMap = iconPositionMap;
+    window.currentSolution = solution;
+
     // Reset selectedSequence and enable cube selection
     selectedSequence = [];
     enableCubeSelection();
-
 }
+
+
 
 function selectCube(cube) {
     if (!cube.classList.contains('selected') && selectedSequence.length < 4) {
@@ -88,10 +123,13 @@ function enableCubeSelection() {
     });
 }
 
-
 function validateSequence() {
-    const { correctSequence, tips } = levels[currentLevel];
-    if (arraysEqual(selectedSequence, correctSequence)) {
+    const solutionIcons = window.currentSolution.map((icon, index) => {
+        const position = Object.keys(window.currentIconPositionMap).find(key => window.currentIconPositionMap[key] === icon);
+        return parseInt(position);
+    });
+
+    if (arraysEqual(selectedSequence, solutionIcons)) {
         document.getElementById('grid-container').classList.add('fade-out');
         setTimeout(() => {
             document.getElementById('grid-container').style.display = 'none';
@@ -99,20 +137,33 @@ function validateSequence() {
             levelMessage.classList.remove('hidden');
             levelMessage.classList.remove('fade-out');
             levelMessage.classList.add('fade-in');
-            document.getElementById('level-text').value = `Level ${currentLevel + 1} Completed!`;
+            document.getElementById('level-text').textContent = `Level ${currentLevel + 1} Completed!`;
+            // Display level completion message based on currentLevel
+            if (currentLevel < levelCompletionMessages.length) {
+                const completionMessage = levelCompletionMessages[currentLevel];
+                const completionMessageParagraph = document.createElement('p');
+                completionMessageParagraph.textContent = completionMessage;
+                document.getElementById('level-text').textContent =(completionMessage);
+            }
         }, 1000);
     } else {
         attempts++;
         if (attempts % 4 === 0) {
             displayTaunt();
         } else if (attempts % 3 === 0) {
-            displayTip(tips[Math.floor(attempts / 3) - 1]);
+            const tipIndex = Math.floor(attempts / 3) - 1;
+            if (tipIndex < solutionIcons.length) {
+                const icon = window.currentSolution[tipIndex];
+                const tip = iconTips[icon][tipIndex % 3];
+                displayTip(tip);
+                shownTips.add(tip); // Store shown tip
+            }
         } else {
             document.getElementById('title').textContent = "FEAR THE RED DAWN";
         }
         resetCubes();
     }
-    
+
     if (attempts === 20) {
         document.getElementById('grid-container').classList.add('fade-out');
         setTimeout(() => {
@@ -129,6 +180,13 @@ function validateSequence() {
         }, 1000);
     }
 }
+
+
+function displayTip(tip) {
+    const title = document.getElementById('title');
+    title.textContent = tip;
+}
+
 
 function resetPuzzle() {
     attempts = 0;
@@ -170,7 +228,7 @@ function displayTaunt() {
 
 function nextLevel() {
     currentLevel++;
-    if (currentLevel < levels.length) {
+    if (currentLevel < levelSolutions.length) {
         const levelMessage = document.getElementById('level-message');
         levelMessage.classList.remove('fade-in');
         levelMessage.classList.add('fade-out');
@@ -191,6 +249,8 @@ function nextLevel() {
     }
 }
 
+
+
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -198,7 +258,6 @@ function shuffleArray(array) {
     }
     return array;
 }
-
 function toggleModal() {
     const modal = document.getElementById('modal');
     modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
@@ -209,14 +268,15 @@ function toggleModal() {
 }
 
 function populateModalContent() {
-    const tips = levels[currentLevel].tips;
+    const solution = levelSolutions[currentLevel];
+    const tips = solution.map(icon => iconTips[icon]);
     const attemptsInfo = `Attempts: ${attempts} / 20`;
 
-    let modalContent = "<h2>Code clues:</h2>";
-    tips.forEach((tip, index) => {
-        if (index < Math.floor(attempts / 3) && !shownTips.has(tip)) {
-            modalContent += `<p><strong>Tip ${index + 1}:</strong> ${tip}</p>`;
-            shownTips.add(tip); // Add tip to shown tips
+    let modalContent = `<h2>STAGE: ${currentLevel + 1}</h2>`;
+    solution.forEach((icon, index) => {
+        const tipIndex = Math.floor(attempts / 3) - 1;
+        if (shownTips.has(iconTips[icon][index % 3])) {
+            modalContent += `<p>${iconTips[icon][index % 3]}</p>`;
         }
     });
 
@@ -225,3 +285,4 @@ function populateModalContent() {
     const modalContentElement = document.getElementById('modal-content');
     modalContentElement.innerHTML = modalContent;
 }
+
