@@ -19,12 +19,12 @@ const iconTips = {
         "Tip 2: Shine halfway through.",
         "Tip 3: A star on the rise."
     ],
-    "lni lni-connectdevelop": [
+    "lni lni-mashroom": [
         "Tip 1: Connecting the dots can lead to breakthroughs.",
         "Tip 2: Build connections.",
         "Tip 3: Develop your path."
     ],
-    "lni lni-sketch": [
+    "lni lni-android": [
     "Tip 1: a girl's best friend",
     "Tip 2: Draw your destiny, like cutting a perfect gem.",
     "Tip 3: Search for adamas and you shal find."
@@ -39,7 +39,7 @@ const iconTips = {
         "Tip 2: Endless possibilities.",
         "Tip 3: Loop through infinity."
     ],
-    "lni lni-strikethrough": [
+    "lni lni-night": [
         "Tip 1: A line through the middle may strike a chord.",
         "Tip 2: Cross out the unnecessary.",
         "Tip 3: Strike with precision and your path through the middle will be revealed"
@@ -47,19 +47,15 @@ const iconTips = {
 };
 
 const levelSolutions = [
-    ["lni lni-sun", "lni lni-star-half", "lni lni-sketch", "lni lni-infinite"],
-    ["lni lni-cloudy-sun", "lni lni-key", "lni lni-thunder", "lni lni-strikethrough"],
-    ["lni lni-strikethrough", "lni lni-connectdevelop", "lni lni-thunder", "lni lni-key"],
-    ["lni lni-star-half", "lni lni-sketch", "lni lni-sun", "lni lni-cloudy-sun"],
+    ["lni lni-night", "lni lni-key", "lni lni-android", "lni lni-mashroom"],
+    ["lni lni-cloudy-sun", "lni lni-key", "lni lni-thunder", "lni lni-night"],
+    ["lni lni-night", "lni lni-mashroom", "lni lni-thunder", "lni lni-key"],
+    ["lni lni-star-half", "lni lni-android", "lni lni-sun", "lni lni-cloudy-sun"],
     ["lni lni-key", "lni lni-infinite", "lni lni-diamond", "lni lni-thunder"]
 ];
 
 const levelCompletionMessages = [
-    "Level 1 Completed! Remember the solomon famiglia is our ally and should not be threathend, executed or otherwise dismemberd",
-    "Level 2 Completed! To travel between the city and Fort Cadworth apply human blood to wall 48C and speak the words: Fear the Red dawn",
-    "Level 3 Completed! Do remember the 3 family heads, Inny,  Minny & MICKEY. If ever asked for verification by a higher ranking officer you must always present your isignia and passcode ",
-    "Level 4 Completed! Receive your passcode & token from the orc chieftan Bildud to enter the main lair. The OTP code is ",
-    "Level 5 Completed! Whatever you do don't intefere with the red magical appliances in the main underground hall!!!"
+    "Gefeliciteerd met het oplossen van deze puzzel! Als verjaardagscadeau zullen we je puzzelkrachten verder testen in een escape room: HET TESTAMENT!",
 ];
 
 
@@ -147,37 +143,7 @@ function validateSequence() {
             }
         }, 1000);
     } else {
-        attempts++;
-        if (attempts % 4 === 0) {
-            displayTaunt();
-        } else if (attempts % 3 === 0) {
-            const tipIndex = Math.floor(attempts / 3) - 1;
-            if (tipIndex < solutionIcons.length) {
-                const icon = window.currentSolution[tipIndex];
-                const tip = iconTips[icon][tipIndex % 3];
-                displayTip(tip);
-                shownTips.add(tip); // Store shown tip
-            }
-        } else {
-            document.getElementById('title').textContent = "FEAR THE RED DAWN";
-        }
         resetCubes();
-    }
-
-    if (attempts === 20) {
-        document.getElementById('grid-container').classList.add('fade-out');
-        setTimeout(() => {
-            document.getElementById('grid-container').style.display = 'none';
-            const levelMessage = document.getElementById('level-message');
-            levelMessage.classList.remove('hidden');
-            levelMessage.classList.remove('fade-out');
-            levelMessage.classList.add('fade-in');
-            document.getElementById('level-text').textContent = "Tell the DM: BOOM!";
-            const resetButton = document.createElement('button');
-            resetButton.textContent = "Reset Puzzle";
-            resetButton.addEventListener('click', resetPuzzle);
-            levelMessage.appendChild(resetButton);
-        }, 1000);
     }
 }
 
